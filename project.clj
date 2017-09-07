@@ -15,12 +15,19 @@
                  ;; when not using devcards
                  [cljsjs/react "15.3.1-0"]
                  [cljsjs/react-dom "15.3.1-0"]
+                 [cljsjs/d3 "3.5.16-0"]
                  #_[org.omcljs/om "1.0.0-alpha46"]
-                 #_[reagent "0.6.0"]
-                 ]
+                 [reagent "0.6.0"]
+                 [macchiato/hiccups "0.4.1"]
+                 [macchiato/core "0.2.2"]
+                 [macchiato/env "0.0.6"]]
 
   :plugins [[lein-figwheel "0.5.9"]
+            [lein-npm "0.6.2"]
             [lein-cljsbuild "1.1.5" :exclusions [org.clojure/clojure]]]
+
+  :npm {:dependencies [[d3.parsets "github:jasondavies/d3-parsets#v1.2.4"]
+                       [d3fc-rebind "4.1.1"]]}
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled"
                                     "target"]
@@ -40,6 +47,10 @@
                                     :asset-path "js/compiled/devcards_out"
                                     :output-to  "resources/public/js/compiled/cljs_parsets_example_devcards.js"
                                     :output-dir "resources/public/js/compiled/devcards_out"
+                                    :foreign-libs [{:file "node_modules/d3.parsets/d3.parsets.js"
+                                                    :requires ["cljsjs.d3"]
+                                                    :provides ["d3.parsets"]}
+                                                   ]
                                     :source-map-timestamp true }}
                        {:id "dev"
                         :source-paths ["src"]
@@ -48,12 +59,20 @@
                                    :asset-path "js/compiled/out"
                                    :output-to  "resources/public/js/compiled/cljs_parsets_example.js"
                                    :output-dir "resources/public/js/compiled/out"
+                                   :foreign-libs [{:file "node_modules/d3.parsets/d3.parsets.js"
+                                                    :requires ["cljsjs.d3"]
+                                                   :provides ["d3.parsets"]}
+                                                  ]
                                    :source-map-timestamp true }}
                        {:id "prod"
                         :source-paths ["src"]
                         :compiler {:main       "cljs-parsets-example.core"
                                    :asset-path "js/compiled/out"
                                    :output-to  "resources/public/js/compiled/cljs_parsets_example.js"
+                                   :foreign-libs [{:file "node_modules/d3.parsets/d3.parsets.js"
+                                                    :requires ["cljsjs.d3"]
+                                                   :provides ["d3.parsets"]}
+                                                  ]
                                    :optimizations :advanced}}]}
 
   :figwheel { :css-dirs ["resources/public/css"] }
